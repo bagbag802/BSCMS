@@ -1,526 +1,315 @@
-<!doctype html>
-<!--[if lt IE 7 ]><html itemscope itemtype="http://schema.org/Product" id="ie6" class="ie ie-old" lang="en-US" prefix="og: http://ogp.me/ns#"><![endif]-->
-<!--[if IE 7 ]>   <html itemscope itemtype="http://schema.org/Product" id="ie7" class="ie ie-old" lang="en-US" prefix="og: http://ogp.me/ns#"><![endif]-->
-<!--[if IE 8 ]>   <html itemscope itemtype="http://schema.org/Product" id="ie8" class="ie ie-old" lang="en-US" prefix="og: http://ogp.me/ns#"><![endif]-->
-<!--[if IE 9 ]>   <html itemscope itemtype="http://schema.org/Product" id="ie9" class="ie" lang="en-US" prefix="og: http://ogp.me/ns#"><![endif]-->
-<!--[if gt IE 9]><!--><html itemscope itemtype="http://schema.org/Product" lang="en-US" prefix="og: http://ogp.me/ns#"><!--<![endif]-->
-<head>
+<?php
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2016, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	https://codeigniter.com
+ * @since	Version 1.0.0
+ * @filesource
+ */
 
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <!--
-       d888888o.       ,o888888o.        ,o888888o. 8888888 8888888888 ,o888888o.    8 8888        8
-     .`8888:' `88.    8888     `88.   . 8888     `88.     8 8888      8888     `88.  8 8888        8
-     8.`8888.   Y8 ,8 8888       `8. ,8 8888       `8b    8 8888   ,8 8888       `8. 8 8888        8
-     `8.`8888.     88 8888           88 8888        `8b   8 8888   88 8888           8 8888        8
-      `8.`8888.    88 8888           88 8888         88   8 8888   88 8888           8 8888        8
-       `8.`8888.   88 8888           88 8888         88   8 8888   88 8888           8 8888        8
-        `8.`8888.  88 8888           88 8888        ,8P   8 8888   88 8888           8 8888888888888
-    8b   `8.`8888. `8 8888       .8' `8 8888       ,8P    8 8888   `8 8888       .8' 8 8888        8
-    `8b.  ;8.`8888    8888     ,88'   ` 8888     ,88'     8 8888      8888     ,88'  8 8888        8
-     `Y8888P ,88P'     `8888888P'        `8888888P'       8 8888       `8888888P'    8 8888        8
+/*
+ *---------------------------------------------------------------
+ * APPLICATION ENVIRONMENT
+ *---------------------------------------------------------------
+ *
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
+ */
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
-    8 888888888o       ,o888888o.  `8.`8888.      ,8'
-    8 8888    `88.  . 8888     `88. `8.`8888.    ,8'
-    8 8888     `88 ,8 8888       `8b `8.`8888.  ,8'
-    8 8888     ,88 88 8888        `8b `8.`8888.,8'
-    8 8888.   ,88' 88 8888         88  `8.`88888'
-    8 8888888888   88 8888         88  .88.`8888.
-    8 8888    `88. 88 8888        ,8P .8'`8.`8888.
-    8 8888      88 `8 8888       ,8P .8'  `8.`8888.
-    8 8888    ,88'  ` 8888     ,88' .8'    `8.`8888.
-    8 888888888P       `8888888P'  .8'      `8.`8888.
-    -->
-    <title>Scotch Box ♥ A Vagrant LAMP Stack for Beginners That Just Works</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+switch (ENVIRONMENT)
+{
+	case 'development':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
 
-    <!-- Favicons -->
-    <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="http://scotch.io/favicon.ico">
+	case 'testing':
+	case 'production':
+		ini_set('display_errors', 0);
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
+	break;
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:400,300|Pathway+Gothic+One">
-    <!--[if lt IE 9]>
-        <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        ::selection {
-            background: #000;
-            color: #fff;
-        }
-        ::-moz-selection {
-            background: #000;
-            color: #fff;
-        }
-        body {
-            font-family: 'Pathway Gothic One', sans-serif;
-            height: 2000px;
-        }
-        a {
-            -webkit-transition: all 310ms ease;
-            -moz-transition: all 310ms ease;
-            transition: all 310ms ease;
-            text-decoration: none !important;
-        }
-        section {
-            position: relative;
-        }
-        #topper {
-            margin-top: 51px;
-            height: 450px;
-            text-align: center;
-        }
-        #topper svg {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-        }
-        #topper h1 {
-            position: absolute;
-            color: #fff;
-            left: 50%;
-            top: 50%;
-            -o-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            margin: 0;
-            font-size: 80px;
-            text-transform: uppercase;
-        }
-        #topper h1 i {
-            color: rgb(255, 157, 157);
-        }
-        article {
-            padding: 50px 0;
-        }
-        article table {
-            background: #e3e3e3;
-        }
-        article .content .wrap {
-            background: rgba(255, 27, 53, 0.8);
-            margin-bottom: 50px;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-        article .content .wrap h2 {
-            margin: 10px 0 15px;
-            color: #fff;
-        }
-        article .content .wrap td {
-            font-size: 20px;
-        }
-        article .fa-times {
-            color: rgb(255, 69, 69);
-        }
-        article .fa-check {
-            color: rgb(0, 179, 64);
-        }
-        #site-footer {
-            background: #05003D;
-            padding: 100px 0;
-            color: #e3e3e3;
-            font-size: 35px;
-        }
-        #site-footer a {
-            color: #fff;
-        }
-        #site-footer a:hover {
-            color: rgb(144, 255, 184);
-        }
-    </style>
+	default:
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'The application environment is not set correctly.';
+		exit(1); // EXIT_ERROR
+}
 
-</head>
-<body>
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
+ */
+	$system_path = 'system';
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Scotch Box</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav pull-right">
-                    <li><a href="http://box.scotch.io">Docs</a></li>
-                    <li><a href="http://github.com/scotch-io/scotch-box">Star on GitHub</a></li>
-                    <li><a href="http://scotch.io">Scotch.io</a></li>
-                    <li><a href="https://twitter.com/scotch_io">@scotch_io</a></li>
-                    <li><a href="https://twitter.com/nickforthought">@nickforthought</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "application"
+ * directory than the default one you can set its name here. The directory
+ * can also be renamed or relocated anywhere on your server. If you do,
+ * use an absolute (full) server path.
+ * For more info please see the user guide:
+ *
+ * https://codeigniter.com/user_guide/general/managing_apps.html
+ *
+ * NO TRAILING SLASH!
+ */
+	$application_folder = 'application';
 
-    <section id="topper" style="background-image: url('data:image/svg+xml;base64,<?php echo base64_encode('<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><defs id="defs4"><filter color-interpolation-filters="sRGB" id="filter3115"><feTurbulence type="fractalNoise" numOctaves="1" baseFrequency="0.9" id="feTurbulence3117"/><feColorMatrix result="result5" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 6 -4.15 " id="feColorMatrix3119"/><feComposite in2="result5" operator="in" in="SourceGraphic" result="result6" id="feComposite3121"/><feMorphology in="result6" operator="dilate" radius="1" result="result3" id="feMorphology3123"/></filter></defs><rect width="100%" height="100%" x="0" y="0" id="rect2985" fill="#000000"/><rect width="100%" height="100%" x="0" y="0" id="rect2985" style="fill:#FF4343;filter:url(#filter3115)"/></svg>'); ?>');">
-        <h1>Welcome to<br>Scotch Box 2.5 <i class="fa fa-heart"></i></h1>
-    </section>
-
-    <article>
-        <div class="container">
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>System Stuff</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>OS</td>
-                            <td>Ubuntu 14.04 LTS (Trusty Tahr) </td>
-                        </tr>
-                        <tr>
-                            <td>PHP Version</td>
-                            <td><?php echo phpversion(); ?></td>
-                        </tr>
-                        <tr>
-                            <td>Ruby 2.2.x</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Vim</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Git</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>cURL</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Imagick</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Composer</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Beanstalkd</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Node</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td>NPM</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>Database Stuff</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <?php
-                        $mysql_exists = FALSE;
-                        if (extension_loaded('mysql') or extension_loaded('mysqli')) :
-                            $mysql_exists = TRUE;
-                        endif;
-                        $mysqli = @new mysqli('localhost', 'root', 'root');
-                        $mysql_running = TRUE;
-                        if (mysqli_connect_errno()) {
-                            $mysql_running = FALSE;
-                        } else {
-                            $mysql_version = $mysqli->server_info;
-                        }
-
-                        $mysqli->close();
-                        ?>
-                        <tr>
-                            <td>MySQL is installed</td>
-                            <td><i class="fa fa-<?php echo ($mysql_exists ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
-                        <tr>
-                            <td>MySQL is connected</td>
-                            <td><i class="fa fa-<?php echo ($mysql_running ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
-                        <tr>
-                            <td>MySQL Version</td>
-                            <td><?php echo ($mysql_running ? $mysql_version : 'N/A'); ?></td>
-                        </tr>
+/*
+ *---------------------------------------------------------------
+ * VIEW DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want to move the view directory out of the application
+ * directory, set the path to it here. The directory can be renamed
+ * and relocated anywhere on your server. If blank, it will default
+ * to the standard location inside your application directory.
+ * If you do move this, use an absolute (full) server path.
+ *
+ * NO TRAILING SLASH!
+ */
+	$view_folder = '';
 
 
-                        <?php
-                        $psql_is_connected = FALSE;
-                        $psql_conn = pg_connect('host=localhost port=5432 dbname=scotchbox user=root password=root');
-                        if ($psql_conn) $psql_is_connected = TRUE;
-                        $psql_version = pg_version($psql_conn)['client'];
-                        pg_close($psql_conn);
-                        ?>
-                        <tr>
-                            <td>PostgreSQL is installed</td>
-                            <td><i class="fa fa-<?php echo ($psql_is_connected ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
-                        <tr>
-                            <td>PostgreSQL is connected</td>
-                            <td><i class="fa fa-<?php echo ($psql_is_connected ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
-                        <tr>
-                            <td>PostgreSQL Version</td>
-                            <td><?php echo ($psql_version ? $psql_version : 'N/A'); ?></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+/*
+ * --------------------------------------------------------------------
+ * DEFAULT CONTROLLER
+ * --------------------------------------------------------------------
+ *
+ * Normally you will set your default controller in the routes.php file.
+ * You can, however, force a custom routing by hard-coding a
+ * specific controller class/function here. For most applications, you
+ * WILL NOT set your routing here, but it's an option for those
+ * special instances where you might want to override the standard
+ * routing in a specific front controller that shares a common CI installation.
+ *
+ * IMPORTANT: If you set the routing here, NO OTHER controller will be
+ * callable. In essence, this preference limits your application to ONE
+ * specific controller. Leave the function name blank if you need
+ * to call functions dynamically via the URI.
+ *
+ * Un-comment the $routing array below to use this feature
+ */
+	// The directory name, relative to the "controllers" directory.  Leave blank
+	// if your controller is not in a sub-directory within the "controllers" one
+	// $routing['directory'] = '';
 
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>Caching stuff</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <?php
-                        $redis = new Redis();
-                        $redis->connect('127.0.0.1', 6379);
-                        ?>
-                        <tr>
-                            <td>Redis</td>
-                            <td><i class="fa fa-<?php echo ($redis->ping() ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
+	// The controller class file name.  Example:  mycontroller
+	// $routing['controller'] = '';
 
-                        <?php
-                        $memcached_running = FALSE;
-                        $memcached_version = FALSE;
-                        $memcached_version = FALSE;
-                        if (class_exists('Memcache')) :
-                            $m = new Memcached();
-                            if ($m->addServer('localhost', 11211)) {
-                                $memcached_running = TRUE;
-                                $memcached_version = $m->getVersion();
-                                $memcached_version = current($memcached_version);
-                            }
-                        endif;
-                        ?>
-                        <tr>
-                            <td>Memcached running</td>
-                            <td><i class="fa fa-<?php echo ($memcached_running ? 'check' : 'times'); ?>"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Memcached version</td>
-                            <td><?php echo ($memcached_version ? $memcached_version : 'N/A'); ?></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+	// The controller function you wish to be called.
+	// $routing['function']	= '';
 
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>Node/NPM Stuff</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Grunt</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
 
-                        <tr>
-                            <td>Bower</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>Yeoman</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>Gulp</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>Browsersync</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>PM2</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>Laravel Stuff</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Laravel Installer</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>Laravel Envoy</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
-                        <tr>
-                            <td>Blackfire Profiler</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>MySQL Database Credentials</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Hostname</td>
-                            <td>localhost</td>
-                        </tr>
-                        <tr>
-                            <td>Username</td>
-                            <td>root</td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td>root</td>
-                        </tr>
-                        <tr>
-                            <td>Database</td>
-                            <td>scotchbox</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>PostgreSQL Database Credentials</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Hostname</td>
-                            <td>localhost</td>
-                        </tr>
-                        <tr>
-                            <td>Username</td>
-                            <td>root</td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td>root</td>
-                        </tr>
-                        <tr>
-                            <td>Database</td>
-                            <td>scotchbox</td>
-                        </tr>
-                        <tr>
-                            <td>Port</td>
-                            <td>5432</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>MongoDB Credentials</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Hostname</td>
-                            <td>localhost</td>
-                        </tr>
-                        <tr>
-                            <td>Database</td>
-                            <td>scotchbox</td>
-                        </tr>
-                        <tr>
-                            <td>Port</td>
-                            <td>27017</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>Mailcatcher</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>Enable it first with</td>
-                            <td>mailcatcher --http-ip=0.0.0.0</td>
-                        </tr>
-                        <tr>
-                            <td>URL</td>
-                            <td>http://192.168.33.10:1080</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+/*
+ * -------------------------------------------------------------------
+ *  CUSTOM CONFIG VALUES
+ * -------------------------------------------------------------------
+ *
+ * The $assign_to_config array below will be passed dynamically to the
+ * config class when initialized. This allows you to set custom config
+ * items or override any default config values found in the config.php file.
+ * This can be handy as it permits you to share one application between
+ * multiple front controller files, with each file containing different
+ * config values.
+ *
+ * Un-comment the $assign_to_config array below to use this feature
+ */
+	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
 
 
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>SSH Credentials</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <tr>
-                            <td>SSH Host</td>
-                            <td><?php echo $_SERVER['SERVER_ADDR']; ?></td>
-                        </tr>
-                        <tr>
-                            <td>SSH User</td>
-                            <td>vagrant</td>
-                        </tr>
-                        <tr>
-                            <td>SSH Password</td>
-                            <td>vagrant</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+// --------------------------------------------------------------------
+// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+// --------------------------------------------------------------------
 
-            <div class="row content">
-                <div class="col-md-6 col-md-offset-3 wrap">
-                    <h2>All PHP Modules</h2>
-                    <table class="table table-responsive table-striped table-hover">
-                        <?php
-                        $modules = get_loaded_extensions();
-                        asort($modules);
-                        foreach ($modules as $extension) :
-                        ?>
-                        <tr>
-                            <td><?php echo $extension; ?></td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-            </div>
+/*
+ * ---------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * ---------------------------------------------------------------
+ */
 
-        </div>
-    </article>
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
 
-    <footer id="site-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="http://box.scotch.io">Scotch Box</a> by <a href="http://scotch.io">scotch.io</a>.
-                </div>
-            </div>
-        </div>
-    </footer>
+	if (($_temp = realpath($system_path)) !== FALSE)
+	{
+		$system_path = $_temp.DIRECTORY_SEPARATOR;
+	}
+	else
+	{
+		// Ensure there's a trailing slash
+		$system_path = strtr(
+			rtrim($system_path, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		).DIRECTORY_SEPARATOR;
+	}
 
+	// Is the system path correct?
+	if ( ! is_dir($system_path))
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		exit(3); // EXIT_CONFIG
+	}
 
-    <!-- Scripts -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+/*
+ * -------------------------------------------------------------------
+ *  Now that we know the path, set the main path constants
+ * -------------------------------------------------------------------
+ */
+	// The name of THIS file
+	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
-</body>
-</html>
+	// Path to the system directory
+	define('BASEPATH', $system_path);
+
+	// Path to the front controller (this file) directory
+	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+
+	// Name of the "system" directory
+	define('SYSDIR', basename(BASEPATH));
+
+	// The path to the "application" directory
+	if (is_dir($application_folder))
+	{
+		if (($_temp = realpath($application_folder)) !== FALSE)
+		{
+			$application_folder = $_temp;
+		}
+		else
+		{
+			$application_folder = strtr(
+				rtrim($application_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
+	{
+		$application_folder = BASEPATH.strtr(
+			trim($application_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
+
+	// The path to the "views" directory
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.'views';
+	}
+	elseif (is_dir($view_folder))
+	{
+		if (($_temp = realpath($view_folder)) !== FALSE)
+		{
+			$view_folder = $_temp;
+		}
+		else
+		{
+			$view_folder = strtr(
+				rtrim($view_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.strtr(
+			trim($view_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require_once BASEPATH.'core/CodeIgniter.php';

@@ -1,5 +1,4 @@
-.DS_STORE
-.vagrant
+.DS_Store
 
 application/cache/*
 !application/cache/index.html
@@ -27,5 +26,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-workspace
 *.sublime-project
 
-
-.metadata
+user_guide
+system
